@@ -188,8 +188,8 @@ function postProcess(content) {
     });
 
     // clean up the other ids as well
-    content = content.replace(/\<(h[123456]) id="(.*)"\>(.*)\<\/h[123456]\>/g, function (match, header, id, title) {
-        return '<' + header + ' id="' + cleanId(id) + '">' + title + '</' + header + '>';
+    content = content.replace(/\<(h[123456])\s+id="([^"]*)"([^\>]*)\>(.*)\<\/h[123456]\>/g, function (match, header, id, attrs, title) {
+        return '<' + header + ' id="' + cleanId(id) + '"' + attrs + '>' + title + '</' + header + '>';
     });
     content = content + globalOptions.comments.join('\n');
     return content;
@@ -204,7 +204,7 @@ function clean(s) {
         allowedAttributes: { a: [ 'href', 'id', 'name', 'target', 'class' ], img: [ 'src', 'alt', 'class' ] , aside: [ 'class' ],
             abbr: [ 'title', 'class' ], details: [ 'open', 'class' ], div: [ 'class' ], meta: [ 'name', 'content' ],
             link: [ 'rel', 'href', 'type', 'sizes' ],
-            h1: [ 'id' ], h2: [ 'id' ], h3: [ 'id' ], h4: [ 'id' ], h5: [ 'id' ], h6: [ 'id' ],
+            h1: [ 'id', 'class' ], h2: [ 'id', 'class' ], h3: [ 'id', 'class' ], h4: [ 'id', 'class' ], h5: [ 'id', 'class' ], h6: [ 'id', 'class' ],
             table: [ 'class' ], tr: [ 'class' ], td: [ 'class' ]}
     };
     // replace things which look like tags which sanitizeHtml will eat
@@ -309,6 +309,7 @@ function render(inputStr, options, callback) {
                     entry.id = $(this).attr('id');
                     entry.content = $(this).text();
                     entry.children = [];
+                    entry.classes = $(this).attr('class') ? $(this).attr('class').split(/\s+/) : [];
                     h1 = entry;
                     result.push(entry);
                 }
@@ -317,6 +318,7 @@ function render(inputStr, options, callback) {
                     child.id = $(this).attr('id');
                     child.content = $(this).text();
                     child.children = [];
+                    child.classes = $(this).attr('class') ? $(this).attr('class').split(/\s+/) : [];
                     h2 = child;
                     if (h1) h1.children.push(child);
                 }
@@ -325,6 +327,7 @@ function render(inputStr, options, callback) {
                     child.id = $(this).attr('id');
                     child.content = $(this).text();
                     child.children = [];
+                    child.classes = $(this).attr('class') ? $(this).attr('class').split(/\s+/) : [];
                     h3 = child;
                     if (h2) h2.children.push(child);
                 }
@@ -333,6 +336,7 @@ function render(inputStr, options, callback) {
                     child.id = $(this).attr('id');
                     child.content = $(this).text();
                     child.children = [];
+                    child.classes = $(this).attr('class') ? $(this).attr('class').split(/\s+/) : [];
                     h4 = child;
                     if (h3) h3.children.push(child);
                 }
@@ -341,6 +345,7 @@ function render(inputStr, options, callback) {
                     child.id = $(this).attr('id');
                     child.content = $(this).text();
                     child.children = [];
+                    child.classes = $(this).attr('class') ? $(this).attr('class').split(/\s+/) : [];
                     h5 = child;
                     if (h4) h4.children.push(child);
                 }
@@ -348,6 +353,7 @@ function render(inputStr, options, callback) {
                     let child = {};
                     child.id = $(this).attr('id');
                     child.content = $(this).text();
+                    child.classes = $(this).attr('class') ? $(this).attr('class').split(/\s+/) : [];
                     if (h5) h5.children.push(child);
                 }
             });
