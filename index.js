@@ -278,7 +278,7 @@ function render(inputStr, options, callback) {
             inputArr = ('\n' + inputStr).split('\n--- \n');
         }
         var headerStr = inputArr[1];
-        var header = yaml.safeLoad(headerStr);
+        var header = yaml.load(headerStr);
 
         /* non-matching languages between Ruby Rouge and highlight.js at 2016/07/10 are
         ['ceylon','common_lisp','conf','cowscript','erb','factor','io','json-doc','liquid','literate_coffeescript','literate_haskell','llvm','make',
@@ -396,4 +396,3 @@ module.exports = {
     render: render,
     srcDir: function () { return globalOptions.root; }
 };
-
